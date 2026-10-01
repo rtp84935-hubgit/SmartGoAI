@@ -1,0 +1,878 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartGo AI - My Plans</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0b0f19;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            height: 70px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 45px 25px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 34px;
+        }
+
+        .header p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .new-plan {
+            background: #6c63ff;
+            color: white;
+            text-decoration: none;
+            padding: 13px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .new-plan:hover {
+            background: #574fd6;
+            transform: translateY(-2px);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 25px;
+        }
+
+        .plan-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 18px;
+            padding: 25px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            border-color: #6c63ff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .plan-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .plan-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            background: #2b2348;
+            color: #a99cff;
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+
+        .description {
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: #0b0f19;
+            padding: 12px 14px;
+            border-radius: 9px;
+            color: #d1d5db;
+            font-size: 14px;
+            border: 1px solid #1f2937;
+        }
+
+        .info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .event-type {
+            display: inline-block;
+            background: #18243a;
+            color: #7db7ff;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 18px;
+            text-transform: capitalize;
+        }
+
+        .section-title {
+            font-size: 16px;
+            margin: 22px 0 10px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        /* TASKS */
+
+        .task {
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            background: #1b1b1b;
+            border: 1px solid #262626;
+            transition: 0.3s;
+        }
+
+        .task:hover {
+            background: #222222;
+        }
+
+        .task-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #6c63ff;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            color: #eee;
+            transition: 0.3s;
+            line-height: 1.4;
+        }
+
+        .task.completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .task.completed {
+            opacity: 0.7;
+        }
+
+        /* REMINDERS */
+
+        .reminder {
+            background: #19152b;
+            border-left: 3px solid #6c63ff;
+            padding: 13px;
+            margin-top: 8px;
+            border-radius: 7px;
+            transition: 0.3s;
+        }
+
+        .reminder:hover {
+            background: #211b39;
+        }
+
+        .reminder-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .reminder-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
+            cursor: pointer;
+            accent-color: #6c63ff;
+            flex-shrink: 0;
+        }
+
+        .reminder-content {
+            flex: 1;
+        }
+
+        .reminder-message {
+            color: #e5e7eb;
+            line-height: 1.4;
+        }
+
+        .reminder-time {
+            color: #8b7fff;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .reminder-status {
+            display: inline-block;
+            margin-top: 7px;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .reminder-completed {
+            opacity: 0.55;
+        }
+
+        .reminder-completed .reminder-message {
+            text-decoration: line-through;
+        }
+
+        .reminder-completed .reminder-status {
+            color: #86efac;
+        }
+
+        /* WEATHER */
+
+        .weather-box {
+            margin-top: 5px;
+            background: linear-gradient(
+                135deg,
+                #151d31,
+                #101827
+            );
+            border: 1px solid #26324a;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .weather-title {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .weather-condition {
+            color: #a5b4fc;
+            font-size: 14px;
+        }
+
+        .temperature {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .weather-advice {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+
+        .rain-warning {
+            margin-top: 10px;
+            background: #30251b;
+            border-left: 3px solid #f59e0b;
+            padding: 10px;
+            border-radius: 6px;
+            color: #fbbf24;
+            font-size: 13px;
+        }
+
+        .no-rain {
+            margin-top: 10px;
+            color: #86efac;
+            font-size: 13px;
+        }
+
+        .created {
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #1f2937;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 80px 20px;
+            background: #111827;
+            border-radius: 18px;
+            border: 1px solid #1f2937;
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .empty h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #9ca3af;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .no-items {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        @media(max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
+            }
+
+            .info-item.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Smart<span>Go</span> AI
+    </div>
+
+    <div class="nav-links">
+        <a href="/myapp/home/">Home</a>
+        <a href="/myapp/plans/">My Plans</a>
+        <a href="/myapp/logout/">Logout</a>
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="header">
+
+        <div>
+            <h1>My Plans</h1>
+
+            <p>
+                Your intelligent plans, tasks, weather and reminders
+            </p>
+        </div>
+
+        <a href="/myapp/home/" class="new-plan">
+            + Create Plan
+        </a>
+
+    </div>
+
+
+    {% if plans %}
+
+        <div class="plans-grid">
+
+            {% for plan in plans %}
+
+                <div class="plan-card">
+
+                    <!-- PLAN HEADER -->
+
+                    <div class="plan-top">
+
+                        <div class="plan-title">
+                            {{ plan.title }}
+                        </div>
+
+                        <div class="status">
+                            {{ plan.status }}
+                        </div>
+
+                    </div>
+
+
+                    <!-- EVENT TYPE -->
+
+                    {% if plan.event_type %}
+
+                        <div class="event-type">
+                            🎯 {{ plan.event_type }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- DESCRIPTION -->
+
+                    {% if plan.description %}
+
+                        <div class="description">
+                            {{ plan.description }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- PLAN INFORMATION -->
+
+                    <div class="info">
+
+                        {% if plan.date %}
+
+                            <div class="info-item">
+                                📅 {{ plan.date|date:"d M Y" }}
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if plan.time %}
+
+                            <div class="info-item">
+                                ⏰ {{ plan.time|time:"h:i A" }}
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if plan.destination %}
+
+                            <div class="info-item full">
+                                📍 {{ plan.destination }}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- WEATHER -->
+
+                    {% if plan.weather_condition or plan.temperature %}
+
+                        <div class="weather-box">
+
+                            <div class="weather-header">
+
+                                <div class="weather-title">
+                                    🌤️ Weather
+                                </div>
+
+                                {% if plan.weather_condition %}
+
+                                    <div class="weather-condition">
+                                        {{ plan.weather_condition }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if plan.temperature %}
+
+                                <div class="temperature">
+                                    🌡️ {{ plan.temperature }}
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if plan.rain_expected %}
+
+                                <div class="rain-warning">
+                                    ☔ Rain is expected.
+                                    Carry an umbrella or raincoat.
+                                </div>
+
+                            {% else %}
+
+                                <div class="no-rain">
+                                    ✓ No significant rain expected.
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if plan.weather_advice %}
+
+                                <div class="weather-advice">
+                                    🤖 {{ plan.weather_advice }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- TASKS -->
+
+                    <div class="section-title">
+                        ✅ Tasks
+                    </div>
+
+
+                    {% for task in plan.task_set.all %}
+
+                        <div class="task {% if task.completed == 'completed' %}completed{% endif %}">
+
+                            <label class="task-label">
+
+                                <input
+                                    type="checkbox"
+                                    class="task-checkbox"
+                                    data-task-id="{{ task.id }}"
+                                    {% if task.completed == 'completed' %}checked{% endif %}
+                                >
+
+                                <span class="task-text">
+                                    {{ task.task }}
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    {% empty %}
+
+                        <p class="no-items">
+                            No tasks added.
+                        </p>
+
+                    {% endfor %}
+
+
+                    <!-- REMINDERS -->
+
+                    <div class="section-title">
+                        🔔 Reminders
+                    </div>
+
+
+                    {% for reminder in plan.reminder_set.all %}
+
+                        <div class="reminder {% if reminder.completed == 'completed' %}reminder-completed{% endif %}">
+
+                            <label class="reminder-label">
+
+                                <input
+                                    type="checkbox"
+                                    class="reminder-checkbox"
+                                    data-reminder-id="{{ reminder.id }}"
+                                    {% if reminder.completed == 'completed' %}checked{% endif %}
+                                >
+
+                                <div class="reminder-content">
+
+                                    <div class="reminder-message">
+                                        🔔 {{ reminder.message }}
+                                    </div>
+
+                                    <div class="reminder-time">
+                                        ⏰ {{ reminder.reminder_time|date:"d M Y, h:i A" }}
+                                    </div>
+
+                                    <div class="reminder-status">
+
+                                        {% if reminder.completed == 'completed' %}
+
+                                            ✓ Completed
+
+                                        {% else %}
+
+                                            • Pending
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </label>
+
+                        </div>
+
+                    {% empty %}
+
+                        <p class="no-items">
+                            No reminders added.
+                        </p>
+
+                    {% endfor %}
+
+
+                    <!-- CREATED DATE -->
+
+                    <div class="created">
+
+                        Created:
+                        {{ plan.created_at|date:"d M Y, h:i A" }}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <!-- NO PLANS -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🧠
+            </div>
+
+            <h2>
+                No Plans Yet
+            </h2>
+
+            <p>
+                Tell SmartGo AI what you want to do and
+                it will create an intelligent plan with
+                tasks, reminders and weather awareness.
+            </p>
+
+            <a href="/myapp/home/" class="new-plan">
+                Create Your First Plan
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+    /* =========================
+       TASK COMPLETION
+    ========================= */
+
+    document.querySelectorAll('.task-checkbox').forEach(function(checkbox) {
+
+        checkbox.addEventListener('change', function() {
+
+            const taskId = this.dataset.taskId;
+            const task = this.closest('.task');
+
+            if (this.checked) {
+
+                task.classList.add('completed');
+
+            } else {
+
+                task.classList.remove('completed');
+
+            }
+
+
+            fetch("/myapp/complete_task/", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+
+                body: JSON.stringify({
+
+                    task_id: taskId,
+                    completed: this.checked
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                console.log("Task updated:", data);
+
+            })
+
+            .catch(error => {
+
+                console.error("Task update error:", error);
+
+            });
+
+        });
+
+    });
+
+
+    /* =========================
+       REMINDER COMPLETION
+    ========================= */
+
+    document.querySelectorAll('.reminder-checkbox').forEach(function(checkbox) {
+
+        checkbox.addEventListener('change', function() {
+
+            const reminderId = this.dataset.reminderId;
+
+            const reminder = this.closest('.reminder');
+
+            const status = reminder.querySelector('.reminder-status');
+
+
+            if (this.checked) {
+
+                reminder.classList.add('reminder-completed');
+
+                status.innerText = '✓ Completed';
+
+            } else {
+
+                reminder.classList.remove('reminder-completed');
+
+                status.innerText = '• Pending';
+
+            }
+
+
+            fetch("/myapp/complete_reminder/", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+
+                body: JSON.stringify({
+
+                    reminder_id: reminderId,
+                    completed: this.checked
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                console.log("Reminder updated:", data);
+
+            })
+
+            .catch(error => {
+
+                console.error("Reminder update error:", error);
+
+            });
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>
+```

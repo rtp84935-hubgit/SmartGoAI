@@ -1,0 +1,2472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartGo AI 2.0</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: #05060a;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ================= BACKGROUND ================= */
+
+        body::before {
+            content: "";
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: #6546ff;
+            filter: blur(180px);
+            opacity: 0.16;
+            border-radius: 50%;
+            top: -250px;
+            left: -200px;
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: #00d9ff;
+            filter: blur(180px);
+            opacity: 0.10;
+            border-radius: 50%;
+            right: -200px;
+            bottom: -150px;
+            z-index: -2;
+        }
+
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.025) 1px,
+                    transparent 1px
+                );
+            background-size: 50px 50px;
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent
+            );
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        nav {
+            width: 100%;
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid rgba(255,255,255,.07);
+            background: rgba(5,6,10,.65);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                135deg,
+                #7357ff,
+                #20d9ff
+            );
+            box-shadow: 0 0 25px rgba(94,86,255,.35);
+            font-size: 19px;
+        }
+
+        .logo span {
+            color: #8d7cff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #858897;
+            text-decoration: none;
+            font-size: 14px;
+            transition: .3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: white;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 12px 7px 7px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 30px;
+            background: rgba(255,255,255,.035);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                135deg,
+                #765aff,
+                #16d9ff
+            );
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .profile span {
+            font-size: 13px;
+            color: #ddd;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            max-width: 1150px;
+            margin: auto;
+            padding: 80px 25px 45px;
+            text-align: center;
+        }
+
+        .ai-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 15px;
+            border: 1px solid rgba(124,105,255,.25);
+            border-radius: 30px;
+            background: rgba(108,87,255,.07);
+            color: #b3a9ff;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        .pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #58e6b0;
+            box-shadow: 0 0 12px #58e6b0;
+            animation: pulse 1.7s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .45;
+                transform: scale(.7);
+            }
+
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 76px);
+            line-height: 1;
+            letter-spacing: -4px;
+            margin-bottom: 23px;
+            font-weight: 800;
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                90deg,
+                #9b89ff,
+                #52ddff
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: auto;
+            color: #8d909d;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* ================= AI INPUT ================= */
+
+        .input-card {
+            max-width: 850px;
+            margin: 40px auto 0;
+            padding: 8px;
+            border-radius: 25px;
+            background: linear-gradient(
+                135deg,
+                rgba(125,99,255,.35),
+                rgba(44,215,255,.15),
+                rgba(255,255,255,.04)
+            );
+            box-shadow: 0 30px 80px rgba(0,0,0,.35);
+        }
+
+        .input-inner {
+            background: rgba(13,14,20,.94);
+            border-radius: 19px;
+            padding: 22px;
+            text-align: left;
+        }
+
+        .input-label {
+            color: #777b8b;
+            font-size: 12px;
+            margin-bottom: 13px;
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 90px;
+            resize: none;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            font-family: inherit;
+        }
+
+        textarea::placeholder {
+            color: #555866;
+        }
+
+        /* ================= VOICE AREA ================= */
+
+        .voice-recording-area {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.07);
+            animation: voiceAppear .3s ease;
+        }
+
+        @keyframes voiceAppear {
+
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .recording-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: #858897;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .recording-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #555866;
+        }
+
+        .recording-dot.active {
+            background: #ff4d6d;
+            box-shadow: 0 0 15px rgba(255,77,109,.8);
+            animation: recordingPulse 1s infinite;
+        }
+
+        @keyframes recordingPulse {
+
+            0%,100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(.65);
+                opacity: .5;
+            }
+
+        }
+
+        .recording-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .record-btn,
+        .stop-btn {
+            border: none;
+            padding: 9px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: .3s;
+        }
+
+        .record-btn {
+            background: rgba(112,87,255,.15);
+            border: 1px solid rgba(112,87,255,.3);
+            color: #b8adff;
+        }
+
+        .record-btn:hover {
+            background: rgba(112,87,255,.25);
+            transform: translateY(-2px);
+        }
+
+        .record-btn.recording {
+            background: rgba(255,77,109,.12);
+            border-color: rgba(255,77,109,.35);
+            color: #ff7c91;
+        }
+
+        .record-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .stop-btn {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.08);
+            color: #aaa;
+        }
+
+        .stop-btn:hover:not(:disabled) {
+            background: rgba(255,255,255,.1);
+            color: white;
+        }
+
+        .stop-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        #audioPreview {
+            width: 100%;
+            height: 38px;
+            margin-top: 13px;
+        }
+
+        /* ================= INPUT BOTTOM ================= */
+
+        .input-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,.06);
+        }
+
+        .input-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.035);
+            color: #aaa;
+            padding: 9px 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: .3s;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255,255,255,.08);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .analyze-btn {
+            border: none;
+            cursor: pointer;
+            padding: 12px 22px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            background: linear-gradient(
+                135deg,
+                #7057ff,
+                #18cfee
+            );
+            box-shadow: 0 8px 25px rgba(75,117,255,.25);
+            transition: .3s;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(75,117,255,.4);
+        }
+
+        /* ================= QUICK ACTIONS ================= */
+
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .quick {
+            color: #777b89;
+            font-size: 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .quick:hover {
+            color: #aaa5ff;
+        }
+
+        /* ================= SECTION ================= */
+
+        .section {
+            max-width: 1150px;
+            margin: auto;
+            padding: 45px 25px;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+
+        .section-heading h2 {
+            font-size: 22px;
+            letter-spacing: -.5px;
+        }
+
+        .section-heading p {
+            color: #6f7280;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .view-all {
+            color: #9385ff;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .card {
+            min-height: 150px;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,.07);
+            background: rgba(255,255,255,.035);
+            backdrop-filter: blur(15px);
+            transition: .35s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(137,119,255,.28);
+            background: rgba(255,255,255,.055);
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            background: rgba(119,96,255,.12);
+            margin-bottom: 18px;
+            font-size: 17px;
+        }
+
+        .card h3 {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .card p {
+            color: #737684;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .status {
+            margin-top: 13px;
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 7px;
+            font-size: 10px;
+        }
+
+        .status.medium {
+            background: rgba(255,180,70,.1);
+            color: #ffbd67;
+        }
+
+        .status.good {
+            background: rgba(65,220,160,.1);
+            color: #63dfaf;
+        }
+
+        .progress {
+            height: 4px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.07);
+            margin-top: 13px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            width: 72%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                #7359ff,
+                #39d9ff
+            );
+            border-radius: inherit;
+        }
+
+        /* ================= WORKFLOW ================= */
+
+        .workflow {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 20px;
+            background: rgba(255,255,255,.025);
+        }
+
+        .step {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            margin: auto auto 11px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(111,89,255,.1);
+            border: 1px solid rgba(126,108,255,.15);
+            font-size: 19px;
+        }
+
+        .step strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .step small {
+            color: #666976;
+            font-size: 10px;
+        }
+
+        .arrow {
+            color: #565968;
+            font-size: 18px;
+        }
+
+        /* ================= RECENT PLANS ================= */
+
+        .plans {
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 18px;
+            overflow: hidden;
+            background: rgba(255,255,255,.025);
+        }
+
+        .plan {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 120px;
+            align-items: center;
+            padding: 17px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.055);
+        }
+
+        .plan:last-child {
+            border-bottom: none;
+        }
+
+        .plan-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .plan-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(111,89,255,.1);
+            border-radius: 9px;
+        }
+
+        .plan-title strong {
+            font-size: 12px;
+        }
+
+        .plan-title small {
+            display: block;
+            color: #666976;
+            margin-top: 3px;
+            font-size: 10px;
+        }
+
+        .plan-info {
+            color: #777b88;
+            font-size: 11px;
+        }
+
+        .plan-status {
+            font-size: 10px;
+            color: #60dbaa;
+        }
+
+        /* ================= CTA ================= */
+
+        .cta {
+            max-width: 1150px;
+            margin: 20px auto 70px;
+            padding: 45px 25px;
+        }
+
+        .cta-inner {
+            text-align: center;
+            padding: 50px 25px;
+            border-radius: 24px;
+            border: 1px solid rgba(127,106,255,.17);
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(104,82,255,.12),
+                    transparent 55%
+                ),
+                rgba(255,255,255,.025);
+        }
+
+        .cta h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .cta p {
+            color: #777a88;
+            font-size: 13px;
+            margin-bottom: 23px;
+        }
+
+        .cta button {
+            border: none;
+            padding: 12px 23px;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #7158ff,
+                #19caec
+            );
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            border-top: 1px solid rgba(255,255,255,.06);
+            padding: 25px 7%;
+            display: flex;
+            justify-content: space-between;
+            color: #555866;
+            font-size: 11px;
+        }
+
+        /* ================= ALERT ================= */
+
+        .alert-container {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 9999;
+            width: 380px;
+        }
+
+        .success-alert {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            background: rgba(20,25,35,.96);
+            border: 1px solid rgba(34,197,94,.45);
+            border-left: 4px solid #22c55e;
+            border-radius: 14px;
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.35),
+                0 0 25px rgba(34,197,94,.08);
+            color: white;
+            animation: alertSlideIn .45s ease;
+        }
+
+        .alert-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(34,197,94,.15);
+            color: #22c55e;
+            font-size: 21px;
+            font-weight: bold;
+            border: 1px solid rgba(34,197,94,.3);
+        }
+
+        .alert-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .alert-content strong {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .alert-content span {
+            font-size: 13px;
+            color: #aeb7c6;
+        }
+
+        .alert-close {
+            background: transparent;
+            border: none;
+            color: #8993a4;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 2px 5px;
+            transition: .2s ease;
+        }
+
+        .alert-close:hover {
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        @keyframes alertSlideIn {
+
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:900px) {
+
+            .cards {
+                grid-template-columns: repeat(2,1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .workflow {
+                flex-wrap: wrap;
+                gap: 25px;
+                justify-content: center;
+            }
+
+            .arrow {
+                display: none;
+            }
+
+            .plan {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+        }
+
+        .remove-btn {
+    background: rgba(255, 70, 90, 0.08);
+    border: 1px solid rgba(255, 70, 90, 0.25);
+    color: #ff7b8c;
+    padding: 9px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: .3s;
+}
+
+.remove-btn:hover:not(:disabled) {
+    background: rgba(255, 70, 90, 0.16);
+    border-color: rgba(255, 70, 90, 0.45);
+    transform: translateY(-2px);
+}
+
+.remove-btn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
+        @media(max-width:600px) {
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .profile span {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 55px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .input-bottom {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .input-tools {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .analyze-btn {
+                width: 100%;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .plan {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-info {
+                display: none;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .alert-container {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+                width: auto;
+            }
+
+            .recording-controls {
+                flex-direction: column;
+            }
+
+            .record-btn,
+            .stop-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="grid-bg"></div>
+
+
+<!-- ================= DJANGO MESSAGES ================= -->
+
+{% if messages %}
+
+<div class="alert-container">
+
+    {% for message in messages %}
+
+    <div class="success-alert">
+
+        <div class="alert-icon">
+            ✓
+        </div>
+
+        <div class="alert-content">
+
+            <strong>
+                Plan Created Successfully!
+            </strong>
+
+            <span>
+                {{ message }}
+            </span>
+
+        </div>
+
+        <button
+            type="button"
+            class="alert-close"
+            onclick="closeAlert(this)">
+
+            ×
+
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✦
+        </div>
+
+        SmartGo <span>AI</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="#" class="active">
+            Home
+        </a>
+
+        <a href="/myapp/plans/">
+            My Plans
+        </a>
+
+        <a href="/myapp/history/">
+            History
+        </a>
+
+        <a href="/myapp/logout/">
+            Logout
+        </a>
+
+    </div>
+
+
+    <div class="profile">
+
+        <div class="avatar">
+            R
+        </div>
+
+        <span>
+            Rahul
+        </span>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="ai-status">
+
+        <div class="pulse"></div>
+
+        SmartGo AI is ready
+
+    </div>
+
+
+    <h1>
+
+        Before you go,<br>
+
+        <span class="gradient-text">
+            ask SmartGo.
+        </span>
+
+    </h1>
+
+
+    <p>
+
+        Your intelligent context-aware personal assistant.
+
+        Tell SmartGo where you're going, why you're going,
+
+        and when — we'll help you prepare.
+
+    </p>
+
+
+    <!-- ================= AI INPUT FORM ================= -->
+
+    <form
+        action="/myapp/analyser/"
+        method="POST"
+        enctype="multipart/form-data"
+        id="smartGoForm">
+
+        {% csrf_token %}
+
+
+        <div class="input-card">
+
+            <div class="input-inner">
+
+                <span class="input-label">
+
+                    ✦ Tell SmartGo about your plan
+
+                </span>
+
+
+                <!-- TEXT INPUT -->
+
+               <textarea
+    name="input"
+    id="userInput"
+    placeholder="Example: I have an interview tomorrow at 10 AM in Kochi..."
+>{{ user_input|default:'' }}</textarea>
+
+
+                <!-- ================= VOICE RECORDING ================= -->
+
+                <div
+                    class="voice-recording-area"
+                    id="voiceArea">
+
+
+                    <div class="recording-status">
+
+                        <div
+                            class="recording-dot"
+                            id="recordingDot">
+                        </div>
+
+
+                        <span id="recordingStatus">
+
+                            Ready to record
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="recording-controls">
+
+
+                        <button
+                            type="button"
+                            class="record-btn"
+                            id="voiceBtn">
+
+                            🎙 Start Voice
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="stop-btn"
+                            id="stopVoiceBtn"
+                            disabled>
+
+                            ⏹ Stop
+
+                        </button>
+
+                        <button type="button" class="remove-btn" id="removeVoiceBtn" disabled> 🗑 Remove </button>
+
+
+                    </div>
+
+
+                    <audio
+                        id="audioPreview"
+                        controls
+                        style="display:none;">
+                    </audio>
+
+
+                </div>
+
+
+                <!-- ================= AUDIO FILE ================= -->
+
+                <input
+                    type="file"
+                    name="audio"
+                    id="audioFile"
+                    accept="audio/*"
+                    hidden>
+
+
+                <!-- ================= BOTTOM ================= -->
+
+                <div class="input-bottom">
+
+
+                    <div class="input-tools">
+
+
+                        <button
+                            type="button"
+                            class="tool-btn"
+                            id="voiceToolBtn">
+
+                            🎙 Voice
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="tool-btn"
+                            id="pdfToolBtn">
+
+                            📄 Upload PDF
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="tool-btn">
+
+                            📅 Schedule
+
+                        </button>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="analyze-btn">
+
+                        Analyze Plan →
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+    <!-- ================= QUICK ACTIONS ================= -->
+
+    <div class="quick-actions">
+
+
+        <button
+            class="quick"
+            type="button"
+            onclick="setExample('I have an interview tomorrow at 10 AM in Kochi')">
+
+            Try: Interview
+
+        </button>
+
+
+        <button
+            class="quick"
+            type="button">
+
+            •
+
+        </button>
+
+
+        <button
+            class="quick"
+            type="button"
+            onclick="setExample('I have a college presentation tomorrow')">
+
+            Try: College
+
+        </button>
+
+
+        <button
+            class="quick"
+            type="button">
+
+            •
+
+        </button>
+
+
+        <button
+            class="quick"
+            type="button"
+            onclick="setExample('I am planning a trip to Wayanad this weekend')">
+
+            Try: Travel
+
+        </button>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- ================= TODAY ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                ⚡ Today's SmartGo
+            </h2>
+
+            <p>
+                Your current plans and AI insights
+            </p>
+
+        </div>
+
+
+        <a href="/myapp/plans/" class="view-all">
+            View all →
+        </a>
+
+    </div>
+
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                📍
+            </div>
+
+            <h3>
+                Kochi
+            </h3>
+
+            <p>
+                Interview destination
+            </p>
+
+            <span class="status medium">
+                Tomorrow · 10:00 AM
+            </span>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ☔
+            </div>
+
+            <h3>
+                Weather
+            </h3>
+
+            <p>
+                Rain may be expected around your travel time.
+            </p>
+
+            <span class="status medium">
+                Carry umbrella
+            </span>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+            <h3>
+                AI Risk
+            </h3>
+
+            <p>
+                SmartGo detected some preparation risks.
+            </p>
+
+            <span class="status medium">
+                Medium Risk
+            </span>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🎒
+            </div>
+
+            <h3>
+                Checklist
+            </h3>
+
+            <p>
+                Your preparation is almost complete.
+            </p>
+
+            <div class="progress">
+
+                <span></span>
+
+            </div>
+
+            <p style="margin-top:8px;">
+                5 of 7 items ready
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW SMARTGO THINKS ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                🧠 How SmartGo thinks
+            </h2>
+
+            <p>
+                Multiple AI layers work together
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="workflow">
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                🎙
+            </div>
+
+            <strong>
+                Input
+            </strong>
+
+            <small>
+                Voice / Text / PDF
+            </small>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                🔎
+            </div>
+
+            <strong>
+                NLP
+            </strong>
+
+            <small>
+                Understand
+            </small>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                🧩
+            </div>
+
+            <strong>
+                Context
+            </strong>
+
+            <small>
+                Build context
+            </small>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                🤖
+            </div>
+
+            <strong>
+                ML Engine
+            </strong>
+
+            <small>
+                Predict
+            </small>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                ✦
+            </div>
+
+            <strong>
+                Gemini
+            </strong>
+
+            <small>
+                Reason
+            </small>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon">
+                🎒
+            </div>
+
+            <strong>
+                Checklist
+            </strong>
+
+            <small>
+                Prepare
+            </small>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= RECENT PLANS ================= -->
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <div>
+
+            <h2>
+                🕘 Recent Plans
+            </h2>
+
+            <p>
+                Your previous SmartGo sessions
+            </p>
+
+        </div>
+
+
+        <a href="#" class="view-all">
+            View history →
+        </a>
+
+    </div>
+
+
+    <div class="plans">
+
+
+        <div class="plan">
+
+            <div class="plan-title">
+
+                <div class="plan-icon">
+                    💼
+                </div>
+
+                <div>
+
+                    <strong>
+                        Interview
+                    </strong>
+
+                    <small>
+                        Kochi
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="plan-info">
+                Sep 10 · 10:00 AM
+            </div>
+
+
+            <div class="plan-info">
+                7 items
+            </div>
+
+
+            <div class="plan-status">
+                ✓ Ready
+            </div>
+
+        </div>
+
+
+        <div class="plan">
+
+            <div class="plan-title">
+
+                <div class="plan-icon">
+                    🎓
+                </div>
+
+                <div>
+
+                    <strong>
+                        College Presentation
+                    </strong>
+
+                    <small>
+                        Calicut
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="plan-info">
+                Sep 12 · 2:00 PM
+            </div>
+
+
+            <div class="plan-info">
+                5 items
+            </div>
+
+
+            <div class="plan-status">
+                3 pending
+            </div>
+
+        </div>
+
+
+        <div class="plan">
+
+            <div class="plan-title">
+
+                <div class="plan-icon">
+                    🏔
+                </div>
+
+                <div>
+
+                    <strong>
+                        Weekend Trip
+                    </strong>
+
+                    <small>
+                        Wayanad
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="plan-info">
+                Sep 18 · 7:00 AM
+            </div>
+
+
+            <div class="plan-info">
+                12 items
+            </div>
+
+
+            <div class="plan-status">
+                ✓ Completed
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta">
+
+    <div class="cta-inner">
+
+        <h2>
+            Ready for your next plan?
+        </h2>
+
+
+        <p>
+            Let SmartGo think about the things you might forget.
+        </p>
+
+
+        <button
+            type="button"
+            onclick="focusInput()">
+
+            ✦ Create Smart Plan
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <span>
+        © 2026 SmartGo AI 2.0
+    </span>
+
+
+    <span>
+        Intelligent • Context-Aware • Personal
+    </span>
+
+</footer>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let mediaRecorder = null;
+let audioChunks = [];
+let microphoneStream = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const voiceToolBtn =
+    document.getElementById("voiceToolBtn");
+
+const voiceArea =
+    document.getElementById("voiceArea");
+
+const voiceBtn =
+    document.getElementById("voiceBtn");
+
+const stopVoiceBtn =
+    document.getElementById("stopVoiceBtn");
+
+const recordingStatus =
+    document.getElementById("recordingStatus");
+
+const recordingDot =
+    document.getElementById("recordingDot");
+
+const audioPreview =
+    document.getElementById("audioPreview");
+
+const audioFile =
+    document.getElementById("audioFile");
+
+const smartGoForm =
+    document.getElementById("smartGoForm");
+
+
+/* =========================================================
+   SHOW VOICE AREA
+========================================================= */
+
+voiceToolBtn.addEventListener("click", function () {
+
+    if (voiceArea.style.display === "block") {
+
+        voiceArea.style.display = "none";
+
+    } else {
+
+        voiceArea.style.display = "block";
+
+        voiceArea.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+
+    }
+
+});
+
+
+/* =========================================================
+   START RECORDING
+========================================================= */
+
+voiceBtn.addEventListener("click", async function () {
+
+    try {
+
+        /* Check browser support */
+
+        if (
+            !navigator.mediaDevices ||
+            !navigator.mediaDevices.getUserMedia
+        ) {
+
+            alert(
+                "Your browser does not support microphone recording."
+            );
+
+            return;
+
+        }
+
+
+        /* Ask for microphone */
+
+        microphoneStream =
+            await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+
+
+        console.log(
+            "Microphone permission granted."
+        );
+
+
+        /* Clear old audio */
+
+        audioChunks = [];
+
+
+        /* Create MediaRecorder */
+
+        mediaRecorder =
+            new MediaRecorder(
+                microphoneStream
+            );
+
+
+        /* Get recorded chunks */
+
+        mediaRecorder.ondataavailable =
+            function (event) {
+
+                if (event.data.size > 0) {
+
+                    audioChunks.push(
+                        event.data
+                    );
+
+                }
+
+            };
+
+
+        /* Recording stopped */
+
+       mediaRecorder.onstop = function () {
+
+    console.log("Recording stopped.");
+
+    const audioBlob = new Blob(
+        audioChunks,
+        {
+            type: "audio/webm"
+        }
+    );
+
+    console.log(
+        "Audio size:",
+        audioBlob.size,
+        "bytes"
+    );
+
+    // Audio preview
+    const audioURL =
+        URL.createObjectURL(audioBlob);
+
+    audioPreview.src = audioURL;
+
+    audioPreview.style.display = "block";
+
+
+    // Create audio file
+    const audio = new File(
+        [audioBlob],
+        "smartgo_voice.webm",
+        {
+            type: "audio/webm"
+        }
+    );
+
+
+    // Attach file to input
+    const dataTransfer =
+        new DataTransfer();
+
+    dataTransfer.items.add(audio);
+
+    audioFile.files =
+        dataTransfer.files;
+
+
+    console.log(
+        "Audio attached:",
+        audioFile.files[0]
+    );
+
+
+    // Enable remove button
+    removeVoiceBtn.disabled = false;
+
+
+    // Update status
+    recordingStatus.innerText =
+        "Recording completed ✓";
+
+    recordingDot.classList.remove(
+        "active"
+    );
+
+
+    // Stop microphone
+    if (microphoneStream) {
+
+        microphoneStream
+            .getTracks()
+            .forEach(
+                function (track) {
+                    track.stop();
+                }
+            );
+
+    }
+
+};removeVoiceBtn.addEventListener(
+    "click",
+    function () {
+
+        console.log(
+            "Removing current recording..."
+        );
+
+
+        // Clear the file input
+        audioFile.value = "";
+
+
+        // Remove audio preview
+        audioPreview.pause();
+
+        audioPreview.removeAttribute(
+            "src"
+        );
+
+        audioPreview.load();
+
+        audioPreview.style.display =
+            "none";
+
+
+        // Clear recorded chunks
+        audioChunks = [];
+
+
+        // Reset status
+        recordingStatus.innerText =
+            "Ready to record";
+
+
+        recordingDot.classList.remove(
+            "active"
+        );
+
+
+        // Disable remove button
+        removeVoiceBtn.disabled = true;
+
+
+        // Reset buttons
+        voiceBtn.disabled = false;
+
+        stopVoiceBtn.disabled = true;
+
+        voiceBtn.classList.remove(
+            "recording"
+        );
+
+        voiceBtn.innerText =
+            "🎙 Start Voice";
+
+
+        console.log(
+            "Recording removed."
+        );
+
+    }
+);
+
+
+        /* Start */
+
+        mediaRecorder.start();
+
+
+        /* Update UI */
+
+        voiceBtn.disabled = true;
+
+        stopVoiceBtn.disabled = false;
+
+        voiceBtn.classList.add(
+            "recording"
+        );
+
+        voiceBtn.innerText =
+            "🔴 Recording...";
+
+
+        recordingStatus.innerText =
+            "Recording your voice...";
+
+
+        recordingDot.classList.add(
+            "active"
+        );
+
+
+        console.log(
+            "Recording started..."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Microphone error:",
+            error
+        );
+
+
+        recordingStatus.innerText =
+            "Microphone access failed";
+
+
+        alert(
+            "Microphone access failed. Please allow microphone permission in your browser."
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   STOP RECORDING
+========================================================= */
+
+stopVoiceBtn.addEventListener(
+    "click",
+    function () {
+
+        if (
+            mediaRecorder &&
+            mediaRecorder.state === "recording"
+        ) {
+
+            mediaRecorder.stop();
+
+
+            voiceBtn.disabled = false;
+
+            stopVoiceBtn.disabled = true;
+
+
+            voiceBtn.classList.remove(
+                "recording"
+            );
+
+
+            voiceBtn.innerText =
+                "🎙 Start Voice";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+smartGoForm.addEventListener(
+    "submit",
+    function (event) {
+
+        const text =
+            document
+                .getElementById("userInput")
+                .value
+                .trim();
+
+
+        const hasAudio =
+            audioFile.files.length > 0;
+
+
+        /* If nothing entered */
+
+        if (!text && !hasAudio) {
+
+            event.preventDefault();
+
+            alert(
+                "Please enter your plan or record your voice."
+            );
+
+            return;
+
+        }
+
+
+        /* If still recording */
+
+        if (
+            mediaRecorder &&
+            mediaRecorder.state === "recording"
+        ) {
+
+            event.preventDefault();
+
+            alert(
+                "Please stop the recording before analyzing."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "Submitting SmartGo form..."
+        );
+
+
+        console.log(
+            "Text:",
+            text
+        );
+
+
+        console.log(
+            "Audio:",
+            audioFile.files[0]
+        );
+
+    }
+);
+
+
+/* =========================================================
+   QUICK EXAMPLE
+========================================================= */
+
+function setExample(text) {
+
+    document.getElementById(
+        "userInput"
+    ).value = text;
+
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+function focusInput() {
+
+    const input =
+        document.getElementById(
+            "userInput"
+        );
+
+
+    input.focus();
+
+
+    input.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* =========================================================
+   CLOSE ALERT
+========================================================= */
+
+function closeAlert(button) {
+
+    const alert =
+        button.parentElement;
+
+
+    alert.remove();
+
+}
+
+</script>
+
+<script>
+const voiceBtn = document.getElementById("voiceBtn");
+const stopVoiceBtn = document.getElementById("stopVoiceBtn");
+const userInput = document.getElementById("userInput");
+
+let recognition;
+let finalTranscript = "";
+
+if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = function () {
+        voiceBtn.disabled = true;
+        stopVoiceBtn.disabled = false;
+        voiceBtn.innerText = "🎙 Listening...";
+    };
+
+    recognition.onresult = function (event) {
+
+        let interimTranscript = "";
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            const transcript =
+                event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + " ";
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        userInput.value =
+            finalTranscript + interimTranscript;
+    };
+
+    recognition.onend = function () {
+
+        voiceBtn.disabled = false;
+        stopVoiceBtn.disabled = true;
+        voiceBtn.innerText = "🎙 Start Voice";
+
+        userInput.value = finalTranscript.trim();
+    };
+
+    recognition.onerror = function (event) {
+
+        console.log("Speech recognition error:", event.error);
+
+        voiceBtn.disabled = false;
+        stopVoiceBtn.disabled = true;
+        voiceBtn.innerText = "🎙 Start Voice";
+    };
+
+    voiceBtn.addEventListener("click", function () {
+
+        finalTranscript = "";
+
+        userInput.value = "";
+
+        recognition.start();
+    });
+
+    stopVoiceBtn.addEventListener("click", function () {
+
+        recognition.stop();
+    });
+
+} else {
+
+    alert(
+        "Speech recognition is not supported. Please use Google Chrome or Microsoft Edge."
+    );
+}
+</script>
+
+<script>
+let shownReminders = new Set();
+
+function requestNotificationPermission() {
+    if ("Notification" in window) {
+        if (Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+    }
+}
+
+function checkReminders() {
+
+    fetch("/myapp/check_reminders/")
+        .then(response => response.json())
+        .then(data => {
+
+            if (!data.reminders) {
+                return;
+            }
+
+            data.reminders.forEach(function(reminder) {
+
+                if (shownReminders.has(reminder.id)) {
+                    return;
+                }
+
+                if (Notification.permission === "granted") {
+
+                    const notification = new Notification(
+                        "🔔 SmartGo Reminder",
+                        {
+                            body: reminder.message,
+                            icon: "/static/images/logo.png"
+                        }
+                    );
+
+                    notification.onclick = function() {
+                        window.focus();
+                        window.location.href = "/myapp/hostory/";
+                    };
+
+                    shownReminders.add(reminder.id);
+                }
+            });
+
+        })
+        .catch(error => {
+            console.error("Reminder check error:", error);
+        });
+}
+
+requestNotificationPermission();
+
+checkReminders();
+
+setInterval(checkReminders, 30000);
+</script>
+
+
+
+
+</body>
+
+</html>
+

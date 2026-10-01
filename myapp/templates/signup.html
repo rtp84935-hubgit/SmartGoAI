@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartGo AI - Sign Up</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            background:
+                radial-gradient(circle at top left, #18243a, transparent 40%),
+                radial-gradient(circle at bottom right, #102c28, transparent 40%),
+                #080b12;
+
+            color: white;
+        }
+
+        .signup-card {
+            width: 430px;
+            padding: 35px;
+
+            background: rgba(20, 25, 35, 0.95);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .logo span {
+            color: #22c55e;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8f99aa;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 14px;
+
+            background: #10151f;
+            color: white;
+
+            border: 1px solid #293241;
+            border-radius: 10px;
+
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34,197,94,0.08);
+        }
+
+        input::placeholder {
+            color: #657083;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #22c55e;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 7px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+
+            border: none;
+            border-radius: 11px;
+
+            background: #22c55e;
+            color: #06100a;
+
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .signup-btn:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(34,197,94,0.2);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #7f899a;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #22c55e;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .message {
+            padding: 11px;
+            margin-bottom: 15px;
+            border-radius: 9px;
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media(max-width: 480px) {
+            .signup-card {
+                width: calc(100% - 30px);
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="signup-card">
+
+    <div class="logo">
+        Smart<span>Go</span> AI
+    </div>
+
+    <p class="subtitle">
+        Create your account and plan smarter
+    </p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form action="/myapp/signup_post/" method="POST"
+          enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text"
+                   name="name"
+                   placeholder="Enter your full name"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel"
+                   name="phone"
+                   placeholder="10 digit phone number"
+                   maxlength="10"
+                   pattern="[0-9]{10}"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Age</label>
+            <input type="number"
+                   name="age"
+                   placeholder="Enter your age"
+                   min="1"
+                   max="120"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Place</label>
+            <input type="text"
+                   name="place"
+                   placeholder="Enter your place"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password"
+                   name="password"
+                   placeholder="Create a password"
+                   minlength="6"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <label>Profile Photo</label>
+            <input type="file"
+                   name="photo"
+                   accept="image/*"
+                   required>
+        </div>
+
+        <button type="submit" class="signup-btn">
+            Create Account
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="/myapp/login/">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>
+

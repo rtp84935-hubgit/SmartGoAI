@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plan History</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 40px 7%;
+        }
+
+        .header {
+            margin-bottom: 35px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        .history-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .plan-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.3s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+            border-color: #64748b;
+        }
+
+        .plan-title {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .info-item {
+            background: #0f172a;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            font-size: 13px;
+        }
+
+        .info-item strong {
+            color: #f8fafc;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #334155;
+            padding-top: 15px;
+        }
+
+        .destination {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: capitalize;
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 70px 20px;
+            color: #94a3b8;
+        }
+
+        .empty h2 {
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 25px 5%;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Plan History</h1>
+        <p>View your previously completed plans and activities.</p>
+    </div>
+
+    {% if data %}
+
+        <div class="history-container">
+
+            {% for plan in data %}
+
+                <div class="plan-card">
+
+                    <div class="plan-title">
+                        {{ plan.title }}
+                    </div>
+
+                    <div class="description">
+                        {{ plan.description }}
+                    </div>
+
+                    <div class="info">
+
+                        {% if plan.date %}
+                        <div class="info-item">
+                            📅 <strong>{{ plan.date }}</strong>
+                        </div>
+                        {% endif %}
+
+                        {% if plan.time %}
+                        <div class="info-item">
+                            ⏰ <strong>{{ plan.time }}</strong>
+                        </div>
+                        {% endif %}
+
+                        {% if plan.event_type %}
+                        <div class="info-item">
+                            🎯 <strong>{{ plan.event_type }}</strong>
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="bottom">
+
+                        {% if plan.destination %}
+                        <div class="destination">
+                            📍 {{ plan.destination }}
+                        </div>
+                        {% else %}
+                        <div class="destination">
+                            Past Plan
+                        </div>
+                        {% endif %}
+
+                        <div class="status">
+                            {{ plan.status }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="empty">
+            <h2>No History Found</h2>
+            <p>You don't have any previous plans yet.</p>
+        </div>
+
+    {% endif %}
+
+</body>
+</html>
